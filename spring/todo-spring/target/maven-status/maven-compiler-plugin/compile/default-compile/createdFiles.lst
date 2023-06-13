@@ -1,0 +1,6 @@
+me/escoffier/TodoApplication.class
+me/escoffier/model/Todo.class
+me/escoffier/TodoApplication$SecurityConfig.class
+me/escoffier/TodoRepository.class
+me/escoffier/TodoResource.class
+me/escoffier/FrontendResource.class

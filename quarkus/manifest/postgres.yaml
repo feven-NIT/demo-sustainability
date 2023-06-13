@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-quarkus
+  namespace: todo-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-quarkus
+  template:
+    metadata:
+      labels:
+        app: postgres-quarkus
+    spec:
+      volumes:
+      - name: postgres-quarkus-storage
+        persistentVolumeClaim:
+          claimName: postgres-quarkus-pvc
+      containers:
+      - name: postgres
+        image: registry.redhat.io/rhel8/postgresql-12:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRESQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-quarkus-credentials
+              key: POSTGRES_USER
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-quarkus-credentials
+              key: POSTGRES_PASSWORD
+        - name: POSTGRESQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: postgres-quarkus-credentials
+              key: POSTGRES_DB
+        - name: POSTGRESQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: postgres-quarkus-credentials
+              key: POSTGRES_PORT
+        volumeMounts:
+        - name: postgres-quarkus-storage
+          mountPath: /var/lib/pgsql/data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-quarkus-pvc
+  namespace: todo-demo
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-quarkus-service
+  namespace: todo-demo
+spec:
+  selector:
+    app: postgres-quarkus
+  ports:
+  - name: postgres-quarkus
+    port: 5432
+    targetPort: 5432
+  type: ClusterIP
+

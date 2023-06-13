@@ -1,0 +1,61 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  labels:
+    machine.openshift.io/cluster-api-cluster: cluster-2wjw4-dfptz 
+  name: cluster-2wjw4-dfptz-aws-arm64-machine-set-0 
+  namespace: openshift-machine-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: cluster-2wjw4-dfptz 
+      machine.openshift.io/cluster-api-machineset: cluster-2wjw4-dfptz-armworker-us-east-2a 
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: cluster-2wjw4-dfptz
+        machine.openshift.io/cluster-api-machine-role: armworker 
+        machine.openshift.io/cluster-api-machine-type: armworker 
+        machine.openshift.io/cluster-api-machineset: cluster-2wjw4-dfptz-armworker-us-east-2a 
+    spec:
+      metadata:
+        labels:
+          node-role.kubernetes.io/armworker: ""
+      providerSpec:
+        value:
+          ami:
+            id: ami-08179aa9cdd6f31c7 
+          apiVersion: awsproviderconfig.openshift.io/v1beta1
+          blockDevices:
+            - ebs:
+                iops: 0
+                volumeSize: 120
+                volumeType: gp2
+          credentialsSecret:
+            name: aws-cloud-credentials
+          deviceIndex: 0
+          iamInstanceProfile:
+            id: cluster-2wjw4-dfptz-worker-profile 
+          instanceType: m6g.xlarge 
+          kind: AWSMachineProviderConfig
+          sshPrivateKey: ""
+          sshPublicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCTMl1LDqVCao2GwvnvVp1vkC0qusn1wJgsPHTtO5pT3ae9B6JoEuGP09isvBYluyJTC//CZVQ0aHjt3teV3BEFGdZTYMit22TKGzXpfqaurGyxMyVUtqp4eFQdDNAzbRvlHgeR3uF42NNz7xT9tm9VjzzUJKpf/OR5d/Utg6RwnFDT/PJLfa+nm1d7QHcEPiJeH61H6E/odKOQOF+4GZiUVUQHDtOQEUcVuVECxga2JNxzQs0zRAGRMTzQAr4xMeD6c6rDrEOD7EOKknPNQP9dgoCaVj5dv/ymj+sZ2c4xZ48EhzfQp89C3P0Buncy0C4v+HDbOedBDq/BSmZuRHJo7YmYG46IJ/HymHG3KWkgyqwd7cgD95E/2k1Sb/fSqgmgil6ka34v2B833p1PZF0/8E8XZkDBXj+FNenBct4LyfdDqtg3JxxWqYBLq1F12x12iTQBSRtIGqayPNUBMvBTr/7WuoI3H5vvdqk58z8r2j3DObipvrkx5rNr77A+U4c= feven@localhost.localdomain"
+          placement:
+            availabilityZone: us-east-2a 
+            region: us-east-2 
+          securityGroups:
+            - filters:
+                - name: tag:Name
+                  values:
+                    - cluster-2wjw4-dfptz-worker-sg 
+          subnet:
+            filters:
+              - name: tag:Name
+                values:
+                  - cluster-2wjw4-dfptz-private-us-east-2a
+          tags:
+            - name: kubernetes.io/cluster/cluster-2wjw4-dfptz 
+              value: owned
+          userDataSecret:
+            name: worker-user-data

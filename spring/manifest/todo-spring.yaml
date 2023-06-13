@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: todo-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-spring
+  namespace: todo-demo
+  labels:
+    app: todo-spring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-spring
+  template:
+    metadata:
+      labels:
+        app: todo-spring
+    spec:
+      containers:
+        - name: todo-spring
+          image: quay.io/feven/todo-spring:latest
+          env:
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-spring-credentials
+                  key: POSTGRES_DB
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-spring-credentials
+                  key: POSTGRES_USER
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-spring-credentials
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: app-config
+              mountPath: /deployments/classes
+          ports:
+            - containerPort: 8080
+      volumes:
+        - name: app-config
+          configMap:
+            name: spring-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-spring-service
+  namespace: todo-demo
+spec:
+  selector:
+    app: todo-spring
+  ports:
+  - name: todo-app
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: todo-spring-route
+  namespace: todo-demo
+spec:
+  to:
+    kind: Service
+    name: todo-spring-service
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge

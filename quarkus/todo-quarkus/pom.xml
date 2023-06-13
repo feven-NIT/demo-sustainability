@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.escoffier</groupId>
+    <groupId>me.feven</groupId>
     <artifactId>universal-todo-quarkus</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 

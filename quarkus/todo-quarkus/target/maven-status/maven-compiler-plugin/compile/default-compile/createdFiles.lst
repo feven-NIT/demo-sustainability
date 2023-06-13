@@ -1,5 +1,5 @@
-me/escoffier/model/Todo.class
+me/feven/model/Todo.class
 META-INF/panache-archive.marker
-me/escoffier/TodoResource.class
-me/escoffier/FrontendResource.class
-me/escoffier/helper/Exceptions.class
+me/feven/TodoResource.class
+me/feven/FrontendResource.class
+me/feven/helper/Exceptions.class

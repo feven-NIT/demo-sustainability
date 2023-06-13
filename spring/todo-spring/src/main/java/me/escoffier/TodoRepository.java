@@ -1,6 +1,6 @@
-package me.escoffier;
+package me.feven;
 
-import me.escoffier.model.Todo;
+import me.feven.model.Todo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

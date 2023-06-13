@@ -1,4 +1,4 @@
-package me.escoffier.model;
+package me.feven.model;
 
 import org.hibernate.annotations.Generated;
 
